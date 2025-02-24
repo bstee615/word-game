@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: white; }
+        #game-container { margin-top: 20px; }
+        input, button { margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Word Game</h1>
+    <div id="game-container">
+        <input type="text" id="word-input" placeholder="Enter a word">
+        <button onclick="submitWord()">Submit</button>
+        <button onclick="resetGame()">Reset</button>
+        <p id="message"></p>
+        <ul id="word-list"></ul>
+    </div>
+
+    <script>
+        let words = [];
+
+        function submitWord() {
+            const input = document.getElementById('word-input');
+            const word = input.value.trim().toLowerCase();
+            const message = document.getElementById('message');
+            message.textContent = "";
+
+            if (!word) {
+                message.textContent = "Please enter a word.";
+                return;
+            }
+
+            if (words.includes(word)) {
+                message.textContent = "This word has already been used.";
+                return;
+            }
+
+            if (words.length > 0) {
+                const lastWord = words[words.length - 1];
+                if (word[0] !== lastWord[lastWord.length - 1]) {
+                    message.textContent = `Word must start with '${lastWord[lastWord.length - 1]}'`;
+                    return;
+                }
+            }
+
+            words.push(word);
+            updateWordList();
+            input.value = "";
+        }
+
+        function updateWordList() {
+            const wordList = document.getElementById('word-list');
+            wordList.innerHTML = "";
+            words.forEach(word => {
+                const li = document.createElement('li');
+                li.textContent = word;
+                wordList.appendChild(li);
+            });
+        }
+
+        function resetGame() {
+            words = [];
+            updateWordList();
+            document.getElementById('message').textContent = "";
+            document.getElementById('word-input').value = "";
+        }
+    </script>
+</body>
+</html>
